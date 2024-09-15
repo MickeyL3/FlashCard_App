@@ -83,14 +83,7 @@ fun CreateFlashCards(
             .fillMaxSize()
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(bottom = 80.dp)
-            .drawBehind {
-                drawRoundRect(
-                    color = Color(0xFF87CEFA),
-                    cornerRadius = CornerRadius(16.dp.toPx()),
-                )
-            }
-            .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(16.dp)),
+            .padding(bottom = 80.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -64,7 +64,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
 
 
 class MainActivity : ComponentActivity() {
-
     private val flashCardViewModel: FlashCardsViewModel by koinViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         splashScreenOn.value = false
                     }
                 } else {
-                    MainScreen(navController = navController)
+                    MainScreen(navController = navController, flashCardViewModel)
 
                 }
             }
@@ -87,7 +86,7 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun MainScreen(navController: NavController) {
+    fun MainScreen(navController: NavController, flashCardsViewModel: FlashCardsViewModel) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -158,29 +157,27 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("EditFlashCard/{flashCardId}") { backStackEntry ->
+//                        val viewModel: FlashCardsViewModel = viewModel()
+                        val editFlashCardViewModel: EditFlashCardViewModel = viewModel()
                         val flashCardIdArg = backStackEntry.arguments?.getString("flashCardId")?.toIntOrNull()
                         val flashCardId = flashCardIdArg ?: -1
-                        val viewModel: FlashCardsViewModel = viewModel()
-                        val editViewModel: EditFlashCardViewModel = viewModel()
-
                         LaunchedEffect(flashCardId) {
                             if (flashCardId != -1) {
-                                viewModel.getFlashCardById(flashCardId)
-                                viewModel.selectedFlashCard.collect { card ->
+                                flashCardsViewModel.getFlashCardById(flashCardId)
+                                flashCardsViewModel.selectedFlashCard.collect { card ->
                                     if (card != null) {
-                                        editViewModel.setDefaultValues(card)
+                                        editFlashCardViewModel.setDefaultValues(card)
                                     }
                                 }
                             } else {
-                                editViewModel.setDefaultValues(null)
+                                editFlashCardViewModel.setDefaultValues(null)
                             }
                         }
-
                         EditFlashCardScreen(
                             navController = navController,
                             flashCardId = flashCardId,
-                            viewModel = viewModel,
-                            editViewModel = editViewModel
+                            viewModel = flashCardsViewModel,
+                            editViewModel = editFlashCardViewModel
                         )
                     }
                     composable("PlayFlashCards") {

@@ -70,14 +70,14 @@ fun EditFlashCardScreen(
     val flashCard by viewModel.selectedFlashCard.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(flashCardId) {
-        if (flashCardId != null) {
+    LaunchedEffect(flashCard) {
+        if (flashCard != null) {
             viewModel.getFlashCardById(flashCardId)
             viewModel.selectedFlashCard.collect { card ->
                 editViewModel.setDefaultValues(card)
             }
         } else {
-            editViewModel.setDefaultValues(flashCardId)
+            editViewModel.setDefaultValues(flashCard)
         }
     }
 
@@ -95,14 +95,7 @@ fun EditFlashCardScreen(
             .fillMaxSize()
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(bottom = 80.dp)
-            .drawBehind {
-                drawRoundRect(
-                    color = Color(0xFF87CEFA),
-                    cornerRadius = CornerRadius(16.dp.toPx())
-                )
-            }
-            .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(16.dp)),
+            .padding(bottom = 80.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
